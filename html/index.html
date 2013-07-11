@@ -1,0 +1,51 @@
+<!doctype html><html lang="en"><head>
+    <meta charset="utf-8">
+    <title>Ladda</title>
+    <meta name="description" content="">
+<!--
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+-->
+    <link rel="stylesheet" type="text/css" href="ladda.css">
+</head><body>
+<img src="/images/heatmap.png">
+<br>
+
+    <button type="submit" class="ladda-button blue expand-down" onclick="location.href='/do/default';">
+        <span class="label">Standard (32x32), 60sec</span>
+        <span class="spinner"></span>
+    </button>
+
+
+    <button type="submit" class="ladda-button blue expand-down" onclick="location.href='/do/big';">
+        <span class="label">Big (48x48), 5min</span>
+        <span class="spinner"></span>
+    </button>
+
+    <button type="submit" class="ladda-button blue expand-down" onclick="location.href='/do/small';">
+        <span class="label">Small (10x10), 30sec</span>
+        <span class="spinner"></span>
+    </a>
+
+
+ <script  style="display:none" src="ladda.js">
+</script> 
+
+<script>
+
+//    Ladda.bind( 'a' );
+    Ladda.bind( 'button' );
+
+			// You can control loading explcitly using the JavaScript API
+			// as outlined below:
+
+			// var l = Ladda.create( document.querySelector( 'button' ) );
+			// l.start();
+			// l.stop();
+			// l.toggle();
+			// l.isLoading();
+
+		</script> 
+
+</body></html>
