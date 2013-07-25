@@ -3,6 +3,7 @@ import time
 import urllib2
 import numpy as np
 import matplotlib as mpl
+
 # we are running headless, use "Agg" as backend for matplotlib
 mpl.use('Agg')
 import matplotlib.pyplot as plt
@@ -91,7 +92,7 @@ def do_it(resolution):
       data[x,y]=temperature
 
 # flip array to get correct orientation
-  data = np.flipud(data)
+##  data = np.flipud(data)
 ##data = np.fliplr(data)
 # Generate heatmap from data array
   cmap = cm.get_cmap('jet')
@@ -100,7 +101,8 @@ def do_it(resolution):
   plt.axis('off')
 # add temp colorbar
   cb = plt.colorbar()
-  cb.set_label('Temp (in C)')
+  date_disp = datetime.now().strftime("%Y-%m-%d  %H:%M")
+  cb.set_label('Temp (in C)  ' + date_disp)
   plt.savefig('/root/thermo/scripts/images/heatmap.png')
 
 # save again with datecoded filename 
@@ -110,4 +112,3 @@ def do_it(resolution):
   redirect("/html/index.html")
 
 run(host='0.0.0.0', port=80)
-#run(host='192.168.1.1', port=80)
