@@ -5,9 +5,9 @@ use HiPi::BCM2835;
 use HiPi::BCM2835::I2C;
 use HiPi::Utils;
 
-// init i2c Hardware
 my $register = 7;
 HiPi::BCM2835->bcm2835_init();
+my $dev = HiPi::BCM2835::I2C->new( address => 0x5a );
 
 use HTTP::Server::Simple::CGI;
 use base qw(HTTP::Server::Simple::CGI);
@@ -36,25 +36,19 @@ sub handle_request {
     }
 }
 
-// Get one measurement from the MLX90614
 sub resp_mlx {
     my $cgi  = shift;   # CGI.pm object
     return if !ref $cgi;
 
-// MLX90614 is on i2c address 0x5a
-    my $dev = HiPi::BCM2835::I2C->new( address => 0x5a );
     my (@reg_val) = (255, 255);
-// read until the high byte is lower than 127 to remove wrong measurements
     while(@reg_val[1] >= 127)
     {
     eval {
-      @reg_val = $dev->i2c_read_register_rs($register, 0x02);
+         @reg_val = $dev->i2c_read_register_rs($register, 0x02);
+         };
     };
-    };
-// Compute temperature in Celsius
     my ($temp_c) = ((@reg_val[1] * 256 + @reg_val[0]) / 50) - 273.15 ;
-
-// return one measuerment via http    
+    
     print $cgi->header;
     print "$temp_c";
 }
