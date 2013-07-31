@@ -12,9 +12,9 @@ from datetime import datetime
 from RPIO import PWM
 
 # setup PWM hardware
+pulse_incr=1
 PWM.set_loglevel(PWM.LOG_LEVEL_ERRORS)
-##PWM.setup(pulse_incr_us=10, delay_hw=1)
-PWM.setup(pulse_incr_us=10, delay_hw=0)
+###PWM.setup(pulse_incr_us=10, delay_hw=0)
 
 # servo pins
 servo_x=25
@@ -49,33 +49,37 @@ def do_it(resolution):
   start_pos=1200
   end_pos=1800
   step_count=32
-  pause=.1
-  pause_line=1
+  pause=.15
+  pause_line=.5
 
   if resolution == 'small':
     start_pos=1200
     end_pos=1800
     step_count=10
     pause=.15
-    pause_line=.3
+    pause_line=.5
   
   if resolution == 'big':
     start_pos=1200
     end_pos=1800
     step_count=48
-    pause=.1
-    pause_line=.3
+    pause=.15
+    pause_line=.5
   
-#
-  step_size=round(((end_pos-start_pos)/(step_count-1)/10))*10
+# compute step size, round to pulse_incr
+  step_size=round(((end_pos-start_pos)/(step_count-1)/pulse_incr))*pulse_incr
+  print step_size
   x=0
   y=0
 
-
+# init data array for temp samples
   data=np.zeros((step_count, step_count))
+# setup Hardware
+  servo = PWM.Servo(dma_channel=0, 
+                    subcycle_time_us=4000, 
+                    pulse_incr_us=pulse_incr)
 
-  servo = PWM.Servo()
-##  servo.__init__(0,6000,10)
+# move to start
   servo.set_servo(servo_x, start_pos)
   servo.set_servo(servo_y, start_pos)
 
@@ -111,4 +115,5 @@ def do_it(resolution):
 
   redirect("/html/index.html")
 
+# start web server for all interfaces on port 80
 run(host='0.0.0.0', port=80)
