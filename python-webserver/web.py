@@ -14,12 +14,16 @@ from RPIO import PWM
 # setup PWM hardware
 pulse_incr=1
 PWM.set_loglevel(PWM.LOG_LEVEL_ERRORS)
-###PWM.setup(pulse_incr_us=10, delay_hw=0)
 
 # servo pins
 servo_x=25
 servo_y=24
-mlx_url="http://localhost:8080/mlx"
+
+# sensor URL
+# use degrees celsius
+mlx_url="http://localhost:8080/c"
+# if you want to use degrees fahrenheit uncomment next line
+#mlx_url="http://localhost:8080/f"
 
 
 @route('/')
@@ -68,7 +72,6 @@ def do_it(resolution):
   
 # compute step size, round to pulse_incr
   step_size=round(((end_pos-start_pos)/(step_count-1)/pulse_incr))*pulse_incr
-  print step_size
   x=0
   y=0
 
@@ -96,8 +99,10 @@ def do_it(resolution):
       data[x,y]=temperature
 
 # flip array to get correct orientation
+# depends on your hardware setup
+#
 ##  data = np.flipud(data)
-##data = np.fliplr(data)
+##  data = np.fliplr(data)
 # Generate heatmap from data array
   cmap = cm.get_cmap('jet')
   plt.clf()
@@ -117,3 +122,4 @@ def do_it(resolution):
 
 # start web server for all interfaces on port 80
 run(host='0.0.0.0', port=80)
+
